@@ -1,13 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
     <script src="main.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    
+    <div class="container">
+        <div id="calculator">
+            <div id="screen">
+                <div id="screen-top" class="screen"><span id="top-text"></span></div>
+                <div id="screen-bottom" class="screen"><span id="bottom-text">0</span></div>
+            </div>
+            <div id="keys" class="grid">
+                <button id = "btn-clear" class="btn btn">CLEAR</button>
+                <button id = "btn-delete" class="btn">DELETE</button>
+                <button id = "btn-7" class="btn btn-num">7</button>
+                <button id = "btn-8" class="btn btn-num">8</button>
+                <button id = "btn-9" class="btn btn-num">9</button>
+                <button id = "btn-divide" class="btn btn-op">÷</button>
+                <button id = "btn-4" class="btn btn-num">4</button>
+                <button id = "btn-5" class="btn btn-num">5</button>
+                <button id = "btn-6" class="btn btn-num">6</button>
+                <button id = "btn-multiply" class="btn btn-op">x</button>
+                <button id = "btn-1" class="btn btn-num">1</button>
+                <button id = "btn-2" class="btn btn-num">2</button>
+                <button id = "btn-3" class="btn btn-num">3</button>
+                <button id = "btn-sub" class="btn btn-op">-</button>
+                <button id = "btn-dot" class="btn">.</button>
+                <button id = "btn-0" class="btn btn-num">0</button>
+                <button id = "btn-equal" class="btn">=</button>
+                <button id = "btn-plus" class="btn btn-op">+</button>
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>
