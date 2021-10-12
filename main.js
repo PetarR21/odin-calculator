@@ -39,6 +39,11 @@ function operate(operator, a, b) {
         case "x":
             return multiply(a, b);
         case "÷":
+            if (b === 0) {
+                alert("Error: dividing with zero");
+                clear();
+                return;
+            }
             return divide(a, b);
     }
 }
@@ -49,7 +54,17 @@ function enterValue(e) {
         return;
     }
 
-    let value = e.target.textContent;
+    let value;
+    if (typeof e.target === 'undefined') {
+        value = e.textContent;
+    } else {
+        value = e.target.textContent;
+    }
+
+
+    if (bottomScreen.textContent === "0" && value === "0") {
+        return;
+    }
 
     if (overwrite === true) {
         bottomScreen.textContent = value;
@@ -60,23 +75,37 @@ function enterValue(e) {
 
 }
 
-
-/*!!!!!!!*/
 function callOperation(e) {
 
     overwrite = true;
 
-    if (operation.length != 0 && operand2.length === 0) {
-        let result = operate(operation,Number(operand1),Number(bottomScreen.textContent));
-        console.log(operand1);
-        console.log(operation)
-        console.log(result);
-        topScreen.textContent = result + " " + operation;
-        bottomScreen.textContent = result;
+    let value;
+    if (typeof e.target === 'undefined') {
+        value = e.textContent;
     } else {
+        value = e.target.textContent;
+    }
+
+
+    if (operand1.length === 0) {
+        operation = value;
         operand1 = bottomScreen.textContent;
-        operation = e.target.textContent;
+        topScreen.textContent = operand1 + " " + operation;
+    } else if (operand2.length != 0) {
+        operation = value;
         topScreen.textContent = bottomScreen.textContent + " " + operation;
+        operand1 = bottomScreen.textContent;
+        operand2 = "";
+    } else {
+        let result = operate(operation, Number(operand1), Number(bottomScreen.textContent));
+        if (result % 1 != 0) {
+            result = result.toFixed(4);
+        }
+        operand1 = result;
+        operation = value;
+        topScreen.textContent = operand1 + " " + operation;
+        bottomScreen.textContent = operand1;
+
     }
 }
 
@@ -84,6 +113,9 @@ function clear(e) {
     overwrite = true;
     bottomScreen.textContent = '0';
     topScreen.textContent = '';
+    operand1 = "";
+    operand2 = "";
+    operation = "";
 }
 
 function deleteValue() {
@@ -93,13 +125,21 @@ function deleteValue() {
 }
 
 function evaluateExpression() {
+    if(topScreen.textContent.indexOf('=') != -1){
+        return;
+    }
+
     operand2 = bottomScreen.textContent;
 
     if (operand1.length != 0 && operand2.length != 0 && operation.length != 0) {
-        topScreen.textContent += (" " + operand2);
-        bottomScreen.textContent = operate(operation, Number(operand1), Number(operand2));
-        operand2 = "";
+        let result = operate(operation, Number(operand1), Number(operand2));
+        if (result % 1 != 0) {
+            result = result.toFixed(4);
+        }
+        topScreen.textContent += (" " + operand2 + " =");
+        bottomScreen.textContent = result;
     }
+
 }
 
 /* Event listeners */
@@ -121,14 +161,30 @@ dotButton.addEventListener('click', () => {
     if (bottomScreen.textContent.indexOf('.') === -1) {
         bottomScreen.textContent += '.';
     }
-})
+});
 
-topDisplay.addEventListener('overflow', () => {
-    console.log("overflow");
-}, false);
+function addDot() {
+    if (bottomScreen.textContent.indexOf('.') === -1) {
+        bottomScreen.textContent += '.';
+    }
+}
 
-bottomDisplay.addEventListener('overflow', () => {
-    console.log("overflow");
-}, false);
+document.addEventListener('keydown', (e) => {
+    let code = ".k" + e.keyCode;
+    let key = document.querySelector(code);
+    let keyClassList = Array.from(key.classList);
 
-
+    if (keyClassList.includes('btn-num')) {
+        enterValue(key);
+    } else if (keyClassList.includes('btn-op')) {
+        callOperation(key);
+    } else if (key.id === 'btn-dot') {
+        addDot();
+    }  else if(key.id === 'btn-equal'){
+        evaluateExpression();
+    } else if(key.id === 'btn-clear'){
+        clear();
+    } else if(key.id === 'btn-delete'){
+        deleteValue();
+    }
+});
